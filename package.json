@@ -1,0 +1,19 @@
+{
+  "name": "gcalthing",
+  "version": "1.0.0",
+  "description": "Me trying out google calendar apis",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicholasjgreen/gcalthing.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nicholasjgreen/gcalthing/issues"
+  },
+  "homepage": "https://github.com/nicholasjgreen/gcalthing#readme"
+}
