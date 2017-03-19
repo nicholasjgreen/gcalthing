@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/nicholasjgreen/gcalthing/issues"
   },
-  "homepage": "https://github.com/nicholasjgreen/gcalthing#readme"
+  "homepage": "https://github.com/nicholasjgreen/gcalthing#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1"
+  },
+  "dependencies": {
+    "google-auth-library": "^0.10.0",
+    "googleapis": "^18.0.0"
+  }
 }
