@@ -3,10 +3,11 @@ var fs = require('fs');
 var readline = require('readline');
 var google = require('googleapis');
 var googleAuth = require('google-auth-library');
+var _ = require('lodash');
 
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/calendar-nodejs-quickstart.json
-var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
+var SCOPES = ['https://www.googleapis.com/auth/calendar'];
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
@@ -103,9 +104,27 @@ function storeToken(token) {
  */
 function listEvents(auth) {
   var calendar = google.calendar('v3');
+
+  calendar.calendarList.list({
+    auth: auth
+  }, function(err, response){
+    if (err) {
+      console.log('The API returned an error: ' + err);
+      return;
+    }
+
+    //console.log(response.items);
+    _.forEach(response.items, function(calendarItem){
+    //  console.log(calendarItem.kind + ' - ' + calendarItem.id + ' - ' + calendarItem.summary);
+    })
+  });
+
+  var calendarId = 'fdpaa7kn9gc5auje89o0canv5k@group.calendar.google.com';
+  //'primary';
+
   calendar.events.list({
     auth: auth,
-    calendarId: 'primary',
+    calendarId: calendarId,
     timeMin: (new Date()).toISOString(),
     maxResults: 10,
     singleEvents: true,
@@ -127,4 +146,55 @@ function listEvents(auth) {
       }
     }
   });
+}
+
+function createEvent(auth) {
+    var event = {
+        'summary': 'Google I/O 2015',
+        'location': '800 Howard St., San Francisco, CA 94103',
+        'description': 'A chance to hear more about Google\'s developer products.',
+        'start': {
+            'dateTime': '2017-05-28T09:00:00-07:00',
+            'timeZone': 'America/Los_Angeles',
+        },
+        'end': {
+            'dateTime': '2017-05-28T17:00:00-07:00',
+            'timeZone': 'America/Los_Angeles',
+        },
+        'recurrence': [
+            'RRULE:FREQ=DAILY;COUNT=2'
+        ],
+        'attendees': [{
+                'email': 'lpage@example.com'
+            },
+            {
+                'email': 'sbrin@example.com'
+            },
+        ],
+        'reminders': {
+            'useDefault': false,
+            'overrides': [{
+                    'method': 'email',
+                    'minutes': 24 * 60
+                },
+                {
+                    'method': 'popup',
+                    'minutes': 10
+                },
+            ],
+        },
+    };
+
+    var calendar = google.calendar('v3');
+    calendar.events.insert({
+        auth: auth,
+        calendarId: 'primary',
+        resource: event,
+    }, function(err, event) {
+        if (err) {
+            console.log('There was an error contacting the Calendar service: ' + err);
+            return;
+        }
+        console.log('Event created: %s', event.htmlLink);
+    });
 }
